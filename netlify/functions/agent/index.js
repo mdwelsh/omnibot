@@ -10,6 +10,7 @@ const fetch = require('node-fetch')
 
 exports.handler = async function (event, context) {
     console.log("Agent handler got event: ", event);
+    console.log("Agent handler request body: ", event.body);
     let statusCode, data;
     let agentUrl = "https://app.fixie.ai/api/agents/mdw/omnibusproject";
     const req = {
@@ -18,7 +19,7 @@ exports.handler = async function (event, context) {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${process.env.FIXIE_API_KEY}`
         },
-        body: JSON.stringify(event.body)
+        body: event.body
     };
 
     try {
