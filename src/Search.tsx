@@ -24,15 +24,13 @@ export default function Search() {
         fetch(url, req)
             .then(async response => {
                 console.log("Query got response: ", response);
-                const isJson = response.headers.get('content-type')?.includes('application/json');
-                console.log("Response isJson: ", isJson);
-                const data = isJson ? await response.json() : null;
+                const data = await response.json();
                 console.log("Response data: ", data);
                 if (!response.ok) {
                     const error = data.error || response.status;
                     return Promise.reject(error);
                 }
-                setResponse(data.response);
+                setResponse(data);
                 setLoading(false);
             })
             .catch(error => {
