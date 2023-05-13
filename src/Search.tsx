@@ -9,7 +9,10 @@ export default function Search() {
     const [response, setResponse] = useState("");
 
     let doSearch = async () => {
+        console.log("doSearch sending query: ", query);
         setLoading(true);
+        // To invoke the Omnibus Agent, we invoke a Netlify Function, which proxies the request
+        // to the Omnibus Agent using a Fixie API key.
         let url = "/.netlify/functions/agent";
         const req = {
             method: "POST",
@@ -20,8 +23,11 @@ export default function Search() {
         };
         fetch(url, req)
             .then(async response => {
+                console.log("Query got response: ", response);
                 const isJson = response.headers.get('content-type')?.includes('application/json');
+                console.log("Response isJson: ", isJson);
                 const data = isJson ? await response.json() : null;
+                console.log("Response data: ", data);
                 if (!response.ok) {
                     const error = data.error || response.status;
                     return Promise.reject(error);

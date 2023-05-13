@@ -9,6 +9,7 @@ const fetch = require('node-fetch')
 
 
 exports.handler = async function (event, context) {
+    console.log("Agent handler got event: ", event);
     let statusCode, data;
     let agentUrl = "https://app.fixie.ai/api/agents/mdw/omnibusproject";
     const req = {
@@ -22,9 +23,12 @@ exports.handler = async function (event, context) {
 
     try {
         const response = await fetch(agentUrl, req);
+        console.log("Agent handler got response: ", response);
         data = await response.json();
+        console.log("Agent handler got data: ", data);
         statusCode = 200;
     } catch (err) {
+        console.log("Agent handler got error: ", err);
         statusCode = err.statusCode || 500;
         data = { error: err.message };
     }
