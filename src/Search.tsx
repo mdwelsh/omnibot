@@ -10,7 +10,7 @@ export default function Search() {
 
     let doSearch = async () => {
         setLoading(true);
-        let url = "https://app.fixie.ai/api/agents/mdw/omnibusproject";
+        let url = "/.netlify/functions/agent";
         const req = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
