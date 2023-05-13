@@ -1,0 +1,8 @@
+/* This is a bit of a hack to force the Textarea component to render
+ * with text in the center. Note this is overriding the "textarea"
+ * element styling, which is what the NextUI "TextArea" component
+ * renders to.
+ */
+ textarea {
+  text-align: center;
+}
