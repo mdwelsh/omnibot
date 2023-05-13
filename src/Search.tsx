@@ -19,7 +19,7 @@ export default function Search() {
         const req = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ gqlQuery }),
+            body: JSON.stringify({ query: gqlQuery }),
         };
         fetch(url, req)
             .then(async response => {
