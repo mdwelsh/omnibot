@@ -1,6 +1,6 @@
 // This is a Netlify Function that is used by the Omnibot web app to access the
 // Omnibus Agent in Fixie. All it does is proxy the request from the web app through
-// to the Fixie Agent, adding the FIXIE_API_KEY to the authorization header.
+// to the Fixie GraphQL API, adding the FIXIE_API_KEY to the authorization header.
 //
 // You need to set the FIXIE_API_KEY environment variable in the Netlify UI if you
 // are deploying this function yourself.
@@ -12,7 +12,7 @@ exports.handler = async function (event, context) {
     console.log("Agent handler got event: ", event);
     console.log("Agent handler request body: ", event.body);
     let statusCode, data;
-    let agentUrl = "https://app.fixie.ai/api/agents/mdw/omnibusproject";
+    let agentUrl = "https://app.fixie.ai/graphql";
     const req = {
         method: "POST",
         headers: {

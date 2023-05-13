@@ -14,12 +14,12 @@ export default function Search() {
         // To invoke the Omnibus Agent, we invoke a Netlify Function, which proxies the request
         // to the Omnibus Agent using a Fixie API key.
         let url = "/.netlify/functions/agent";
+        let gqlQuery = `{allSessions { handle }}`;
+
         const req = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                "message": { "text": query },
-            }),
+            body: JSON.stringify({ gqlQuery }),
         };
         fetch(url, req)
             .then(async response => {
