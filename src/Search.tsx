@@ -73,7 +73,7 @@ export default function Search() {
 
         // We first send the query to the session.
         let query = `mutation Post($session: String!, $text: String!) {
-            sendSessionMessage(messageData: {session: $handle, text: $text}) {
+            sendSessionMessage(messageData: {session: $session, text: $text}) {
                 message {
                     text
                 }
