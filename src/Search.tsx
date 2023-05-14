@@ -128,6 +128,7 @@ export default function Search() {
         });
 
         // Start polling for messages.
+        console.log("Starting to poll for responses");
         setPolling(true);
         const interval = setInterval(pollForMessages, 1000);
         setIntervalId(interval);
