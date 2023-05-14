@@ -69,12 +69,12 @@ function Message({ message }: { message: any }) {
                 <Card.Body>
                     <Grid.Container gap={1} justify="flex-start" alignItems="center">
                         <Grid>
-                            <Avatar src={message.sentBy.avatar} />
+                            <Avatar src={ (message.type === "response") ? "/trefoil.png" : "/user.png" } />
                         </Grid>
                         <Grid>
                             <Text
                                 size={(message.type === "response") ? "medium" : "large"}
-                                color={(message.type === "response") ? "primary" : "secondary"}>
+                                color={(message.type === "response") ? "" : "primary"}>
                                 <ReactMarkdown>{message.text}</ReactMarkdown>
                             </Text>
                         </Grid>
@@ -125,6 +125,10 @@ export default function Search() {
                 console.log("Polling for messages on: ", sessionHandle);
                 const result = await getMessages(sessionHandle);
                 setMessages(result);
+
+                // XXX This is not quite right, since if we poll before the query message shows
+                // up in the Session, we prematurely believe that the query is done.
+                // We need to ensure that the message.inReplyTo is the most recent query message.
                 if (result[result.length - 1].type === "response") {
                     console.log("Got final response, stopping polling on interval: ", intervalId);
                     clearInterval(intervalId);
