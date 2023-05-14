@@ -38,7 +38,7 @@ export default function Search() {
         }`;
         let sessionData = await gqlQuery(query);
         console.log("createSession got sessionData: ", sessionData);
-        let sessionHandle = sessionData.createSession.session.handle;
+        let sessionHandle = sessionData.data.createSession.session.handle;
         setSession(sessionHandle);
     };
 
