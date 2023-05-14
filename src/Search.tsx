@@ -44,6 +44,7 @@ export default function Search() {
     };
 
     let getMessages = async () => {
+        console.log("Getting messages for session: ", session);
         const query = `query getMessages($session: String!) {
                 sessionByHandle(handle: $session) {
                     messages {
@@ -71,6 +72,8 @@ export default function Search() {
             await createSession();
         }
 
+        console.log("Sending query to session: ", session);
+
         // We first send the query to the session.
         let query = `mutation Post($session: String!, $text: String!) {
             sendSessionMessage(messageData: {session: $session, text: $text}) {
@@ -79,11 +82,11 @@ export default function Search() {
                 }
             }
         }`;
-        let sessionData = await gqlQuery(query, {
+        let messageData = await gqlQuery(query, {
             session: session,
             text: userQuery,
         });
-        let messageText = sessionData.data.sendSessionMessage.message.text;
+        let messageText = messageData.data.sendSessionMessage.message.text;
         console.log("Sent text: ", messageText);
 
         // XXX NEED TO POLL HERE.
