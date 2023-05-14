@@ -22,54 +22,55 @@ async function gqlQuery(query: string, variables: any): Promise<any> {
     return data;
 }
 
+async function createSession() {
+    console.log("Creating new session");
+    const query = `mutation {
+        createSession(sessionData: { frontendAgentId: "mdw/omnibusproject" }) {
+            session {
+                handle
+            }
+        }
+    }`;
+    const sessionData = await gqlQuery(query, {});
+    const sessionHandle = sessionData.data.createSession.session.handle;
+    console.log("Created session: ", sessionHandle);
+    return sessionHandle;
+};
+
+async function getMessages(session: string) {
+    console.log("Getting messages for session: ", session);
+    const query = `query getMessages($session: String!) {
+            sessionByHandle(handle: $session) {
+                messages {
+                    id
+                    text
+                    sentBy {
+                        handle
+                    }
+                    type
+                    inReplyTo { id }
+                    timestamp
+                }
+            }
+        }
+    `;
+    const data = await gqlQuery(query, { session: session });
+    console.log("Got messages: ", data);
+};
+
 export default function Search() {
     const [loading, setLoading] = useState(false);
     const [userQuery, setUserQuery] = useState("");
     const [response, setResponse] = useState("");
     const [session, setSession] = useState("");
 
-    let createSession = async () => {
-        console.log("Creating new session");
-        const query = `mutation {
-            createSession(sessionData: { frontendAgentId: "mdw/omnibusproject" }) {
-                session {
-                    handle
-                }
-            }
-        }`;
-        const sessionData = await gqlQuery(query, {});
-        const sessionHandle = sessionData.data.createSession.session.handle;
-        console.log("Created session: ", sessionHandle);
-        setSession(sessionHandle);
-    };
-
-    let getMessages = async () => {
-        console.log("Getting messages for session: ", session);
-        const query = `query getMessages($session: String!) {
-                sessionByHandle(handle: $session) {
-                    messages {
-                        id
-                        text
-                        sentBy {
-                            handle
-                        }
-                        type
-                        inReplyTo { id }
-                        timestamp
-                    }
-                }
-            }
-        `;
-        const data = await gqlQuery(query, { session: session });
-        console.log("Got messages: ", data);
-    };
-
-    let doSearch = async () => {
+    const doSearch = async () => {
         console.log("doSearch sending query: ", userQuery);
         setLoading(true);
 
         if (session === "") {
-            await createSession();
+            const handle = await createSession();
+            setSession(handle);
         }
 
         console.log("Sending query to session: ", session);
@@ -90,7 +91,7 @@ export default function Search() {
         console.log("Sent text: ", messageText);
 
         // XXX NEED TO POLL HERE.
-        await getMessages();
+        await getMessages(session);
         setLoading(false);
     };
 
