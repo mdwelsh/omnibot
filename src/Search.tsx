@@ -4,12 +4,13 @@ import { Container, Input, Loading, Grid } from "@nextui-org/react";
 import { BiSearch } from "react-icons/bi";
 
 // Proxy through our Netlify function to the GraphQL endpoint of the Fixie service.
-async function gqlQuery(query: string): Promise<any> {
+async function gqlQuery(query: string, variables: any): Promise<any> {
     let url = "/.netlify/functions/agent";
+    const body = JSON.stringify({ query, variables });
     const req = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: query }),
+        body: body,
     };
     const response = await fetch(url, req);
     if (!response.ok) {
@@ -29,17 +30,37 @@ export default function Search() {
 
     let createSession = async () => {
         console.log("Creating new session");
-        let query = `mutation {
+        const query = `mutation {
             createSession(sessionData: { frontendAgentId: "mdw/omnibusproject" }) {
                 session {
                     handle
                 }
             }
         }`;
-        let sessionData = await gqlQuery(query);
-        console.log("createSession got sessionData: ", sessionData);
-        let sessionHandle = sessionData.data.createSession.session.handle;
+        const sessionData = await gqlQuery(query, {});
+        const sessionHandle = sessionData.data.createSession.session.handle;
+        console.log("Created session: ", sessionHandle);
         setSession(sessionHandle);
+    };
+
+    let getMessages = async () => {
+        const query = `query getMessages($session: String!) {
+                sessionByHandle(handle: $session) {
+                    messages {
+                        id
+                        text
+                        sentBy {
+                            handle
+                        }
+                        type
+                        inReplyTo { id }
+                        timestamp
+                    }
+                }
+            }
+        `;
+        const data = await gqlQuery(query, { session: session });
+        console.log("Got messages: ", data);
     };
 
     let doSearch = async () => {
@@ -49,6 +70,25 @@ export default function Search() {
         if (session === "") {
             await createSession();
         }
+
+        // We first send the query to the session.
+        let query = `mutation Post($session: String!, $text: String!) {
+            sendSessionMessage(messageData: {session: $handle, text: $text}) {
+                message {
+                    text
+                }
+            }
+        }`;
+        let sessionData = await gqlQuery(query, {
+            session: session,
+            text: userQuery,
+        });
+        let messageText = sessionData.data.sendSessionMessage.message.text;
+        console.log("Sent text: ", messageText);
+
+        // XXX NEED TO POLL HERE.
+        await getMessages();
+        setLoading(false);
     };
 
 
