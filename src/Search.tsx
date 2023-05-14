@@ -63,7 +63,11 @@ async function getMessages(session: string) {
 
 function Message({ message }: { message: any }) {
     return (
-        <ReactMarkdown>{message.text}</ReactMarkdown>
+        <Container>
+            <Text>
+                <ReactMarkdown>{message.text}</ReactMarkdown>
+            </Text>
+        </Container>
     );
 }
 
