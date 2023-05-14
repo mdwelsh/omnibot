@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Container, Input, Loading, Grid } from "@nextui-org/react";
+import { useState, useEffect } from "react";
+import { Container, Input, Loading, Grid, Text } from "@nextui-org/react";
 import { BiSearch } from "react-icons/bi";
 
 // Proxy through our Netlify function to the GraphQL endpoint of the Fixie service.
@@ -56,20 +56,58 @@ async function getMessages(session: string) {
     `;
     const data = await gqlQuery(query, { session: session });
     console.log("Got messages: ", data);
+    return data.data.sessionByHandle.messages;
 };
 
+function Message({ message }: { message: any }) {
+    return (
+        <Text>{message.text}</Text>
+    );
+}
+
+function SearchResults({ results }: { results: any[] }) {
+    return (
+        <Container>
+            <Grid.Container justify="center" gap={1} css={{ width: "100%" }}>
+                {results.map((result) => (
+                    <Grid xs={12}>
+                        <Message message={result} />
+                    </Grid>
+                ))}
+            </Grid.Container>
+        </Container>
+    );
+}
+
+
 export default function Search() {
-    const [loading, setLoading] = useState(false);
+    const [sessionHandle, setSessionHandle] = useState("");
     const [userQuery, setUserQuery] = useState("");
-    const [response, setResponse] = useState("");
+    const [messages, setMessages] = useState([]);
+    const [polling, setPolling] = useState(false);
+    const [intervalId, setIntervalId] = useState(0);
+
+    const pollForMessages = async () => {
+        console.log("Polling for messages on: ", sessionHandle);
+        const result = await getMessages(sessionHandle);
+        setMessages(result);
+        // XXX TODO: Check to see if final message is here, cancel interval, and set polling to false.
+        // Clean up the interval when the component unmounts
+        //return () => clearInterval(intervalId);
+    };
+
+    useEffect(() => {
+        // Create session when component mounts.
+        // This async function is here because we can't use async directly in useEffect.
+        const openSession = async () => {
+            const session = await createSession();
+            setSessionHandle(session);
+        };
+        openSession();
+    }, []);
 
     const doSearch = async () => {
         console.log("doSearch sending query: ", userQuery);
-        setLoading(true);
-
-        // We always create a new session.
-        const sessionHandle = await createSession();
-
         console.log("Sending query to session: ", sessionHandle);
 
         // We first send the query to the session.
@@ -80,18 +118,17 @@ export default function Search() {
                 }
             }
         }`;
-
         // We don't await here since we want to go immediately to polling.
         gqlQuery(query, {
             session: sessionHandle,
             text: userQuery,
         });
 
-        // XXX NEED TO POLL HERE.
-        await getMessages(sessionHandle);
-        setLoading(false);
+        // Start polling for messages.
+        setPolling(true);
+        const interval = setInterval(pollForMessages, 1000);
+        setIntervalId(interval);
     };
-
 
     return (
         <Container>
@@ -103,10 +140,10 @@ export default function Search() {
                         rounded
                         size="xl"
                         fullWidth
-                        readOnly={loading}
-                        disabled={loading}
+                        readOnly={polling}
+                        disabled={polling}
                         contentLeft={
-                            loading ? <Loading size="sm" type="points-opacity" /> : <BiSearch />
+                            polling ? <Loading size="sm" type="points-opacity" /> : <BiSearch />
                         }
                         onChange={(e) => {
                             setUserQuery(e.target.value);
@@ -119,8 +156,11 @@ export default function Search() {
                     />
                 </Grid>
             </Grid.Container>
-
-
+            <Grid.Container justify="center" gap={1} css={{ width: "100%" }}>
+                <Grid xs={12}>
+                    <SearchResults results={messages} />
+                </Grid>
+            </Grid.Container>
         </Container>
     )
 }
