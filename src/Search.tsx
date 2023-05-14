@@ -91,9 +91,12 @@ export default function Search() {
         console.log("Polling for messages on: ", sessionHandle);
         const result = await getMessages(sessionHandle);
         setMessages(result);
-        // XXX TODO: Check to see if final message is here, cancel interval, and set polling to false.
-        // Clean up the interval when the component unmounts
-        //return () => clearInterval(intervalId);
+
+        if (result[result.length - 1].type === "response") {
+            console.log("Got final response, stopping polling");
+            clearInterval(intervalId);
+            setPolling(false);
+        }
     };
 
     useEffect(() => {
