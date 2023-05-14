@@ -85,29 +85,40 @@ export default function Search() {
     const [userQuery, setUserQuery] = useState("");
     const [messages, setMessages] = useState([]);
     const [polling, setPolling] = useState(false);
-    const [intervalId, setIntervalId] = useState(0);
-
-    const pollForMessages = async () => {
-        console.log("Polling for messages on: ", sessionHandle);
-        const result = await getMessages(sessionHandle);
-        setMessages(result);
-
-        if (result[result.length - 1].type === "response") {
-            console.log("Got final response, stopping polling on interval: ", intervalId);
-            clearInterval(intervalId);
-            setPolling(false);
-        }
-    };
 
     useEffect(() => {
         // Create session when component mounts.
         // This async function is here because we can't use async directly in useEffect.
-        const openSession = async () => {
-            const session = await createSession();
-            setSessionHandle(session);
-        };
-        openSession();
-    }, []);
+        if (sessionHandle === "") {
+            const openSession = async () => {
+                const session = await createSession();
+                setSessionHandle(session);
+            };
+            openSession();
+        }
+
+        // Poll for messages when necessary.
+        let intervalId: number = 0;
+        if (polling) {
+            console.log("Starting polling interval");
+            intervalId = setInterval(async () => {
+                console.log("Polling for messages on: ", sessionHandle);
+                const result = await getMessages(sessionHandle);
+                setMessages(result);
+                if (result[result.length - 1].type === "response") {
+                    console.log("Got final response, stopping polling on interval: ", intervalId);
+                    clearInterval(intervalId);
+                    setPolling(false);
+                }
+            }, 1000);
+        }
+        return () => {
+            if (intervalId) {
+                console.log("Cleaning up polling interval: ", intervalId);
+                clearInterval(intervalId);
+            }
+        }
+    }, [sessionHandle, polling]);
 
     const doSearch = async () => {
         console.log("doSearch sending query: ", userQuery);
