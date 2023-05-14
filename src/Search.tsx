@@ -3,40 +3,57 @@ import { useState } from "react";
 import { Container, Input, Loading, Grid } from "@nextui-org/react";
 import { BiSearch } from "react-icons/bi";
 
+// Proxy through our Netlify function to the GraphQL endpoint of the Fixie service.
+async function gqlQuery(query: string): Promise<any> {
+    let url = "/.netlify/functions/agent";
+    const req = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: query }),
+    };
+    fetch(url, req)
+        .then(async response => {
+            console.log("gqlQuery got response: ", response);
+            const data = await response.json();
+            console.log("Response data: ", data);
+            if (!response.ok) {
+                const error = data.error || response.status;
+                return Promise.reject(error);
+            }
+            return data;
+        })
+}
+
+
+
 export default function Search() {
     const [loading, setLoading] = useState(false);
-    const [query, setQuery] = useState("");
+    const [userQuery, setUserQuery] = useState("");
     const [response, setResponse] = useState("");
+    const [session, setSession] = useState("");
+
+    let createSession = async () => {
+        console.log("Creating new session");
+        let query = `mutation {
+            createSession(sessionData: { frontendAgentId: "mdw/omnibusproject" }) {
+                session {
+                    handle
+                }
+            }
+        }`;
+        let sessionData = await gqlQuery(query);
+        console.log("createSession got sessionData: ", sessionData);
+        let sessionHandle = sessionData.createSession.session.handle;
+        setSession(sessionHandle);
+    };
 
     let doSearch = async () => {
-        console.log("doSearch sending query: ", query);
+        console.log("doSearch sending query: ", userQuery);
         setLoading(true);
-        // To invoke the Omnibus Agent, we invoke a Netlify Function, which proxies the request
-        // to the Omnibus Agent using a Fixie API key.
-        let url = "/.netlify/functions/agent";
-        let gqlQuery = `{allSessions { handle }}`;
 
-        const req = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query: gqlQuery }),
-        };
-        fetch(url, req)
-            .then(async response => {
-                console.log("Query got response: ", response);
-                const data = await response.json();
-                console.log("Response data: ", data);
-                if (!response.ok) {
-                    const error = data.error || response.status;
-                    return Promise.reject(error);
-                }
-                setResponse(data);
-                setLoading(false);
-            })
-            .catch(error => {
-                console.log("Query got error: ", error);
-                setLoading(false);
-            })
+        if (session === "") {
+            await createSession();
+        }
     };
 
 
@@ -56,7 +73,7 @@ export default function Search() {
                             loading ? <Loading size="sm" type="points-opacity" /> : <BiSearch />
                         }
                         onChange={(e) => {
-                            setQuery(e.target.value);
+                            setUserQuery(e.target.value);
                         }}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
