@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Container, Input, Loading, Grid, Text } from "@nextui-org/react";
+import { Card, Container, Input, Loading, Grid, Text } from "@nextui-org/react";
 import { BiSearch } from "react-icons/bi";
 import ReactMarkdown from 'react-markdown';
 
@@ -64,9 +64,15 @@ async function getMessages(session: string) {
 function Message({ message }: { message: any }) {
     return (
         <Container>
-            <Text>
-                <ReactMarkdown>{message.text}</ReactMarkdown>
-            </Text>
+            <Card>
+                <Card.Body>
+                    <Text
+                        size={(message.type === "response") ? "medium" : "large"}
+                        color={(message.type === "response") ? "primary" : "secondary"}>
+                        <ReactMarkdown>{message.text}</ReactMarkdown>
+                    </Text>
+                </Card.Body>
+            </Card>
         </Container>
     );
 }
@@ -75,7 +81,7 @@ function SearchResults({ results }: { results: any[] }) {
     return (
         <Container>
             <Grid.Container justify="center" gap={1} css={{ width: "100%" }}>
-                {results.map((result) => (
+                {results.filter((result) => result.type != "exp_query").map((result) => (
                     <Grid xs={12}>
                         <Message message={result} />
                     </Grid>
