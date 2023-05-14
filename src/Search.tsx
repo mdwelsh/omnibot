@@ -73,7 +73,7 @@ function Message({ message }: { message: any }) {
                         </Grid>
                         <Grid>
                             <Text
-                                size={(message.type === "response") ? "medium" : "large"}
+                                size={(message.type === "response") ? "$md" : "$xl"}
                                 color={(message.type === "response") ? "" : "primary"}>
                                 <ReactMarkdown>{message.text}</ReactMarkdown>
                             </Text>
