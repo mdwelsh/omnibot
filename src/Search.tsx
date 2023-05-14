@@ -80,12 +80,12 @@ export default function Search() {
                 }
             }
         }`;
-        let messageData = await gqlQuery(query, {
+
+        // We don't await here since we want to go immediately to polling.
+        gqlQuery(query, {
             session: sessionHandle,
             text: userQuery,
         });
-        let messageText = messageData.data.sendSessionMessage.message.text;
-        console.log("Sent text: ", messageText);
 
         // XXX NEED TO POLL HERE.
         await getMessages(sessionHandle);
