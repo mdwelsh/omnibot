@@ -93,7 +93,7 @@ export default function Search() {
         setMessages(result);
 
         if (result[result.length - 1].type === "response") {
-            console.log("Got final response, stopping polling");
+            console.log("Got final response, stopping polling on interval: ", intervalId);
             clearInterval(intervalId);
             setPolling(false);
         }
@@ -132,6 +132,7 @@ export default function Search() {
         setPolling(true);
         const interval = setInterval(pollForMessages, 1000);
         setIntervalId(interval);
+        console.log("Started polling with interval id: ", interval);
     };
 
     return (
