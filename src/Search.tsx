@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Card, Container, Input, Loading, Grid, Text } from "@nextui-org/react";
+import { Avatar, Card, Container, Input, Loading, Grid, Text } from "@nextui-org/react";
 import { BiSearch } from "react-icons/bi";
 import ReactMarkdown from 'react-markdown';
 
@@ -48,6 +48,7 @@ async function getMessages(session: string) {
                     text
                     sentBy {
                         handle
+                        avatar
                     }
                     type
                     inReplyTo { id }
@@ -66,11 +67,18 @@ function Message({ message }: { message: any }) {
         <Container>
             <Card>
                 <Card.Body>
-                    <Text
-                        size={(message.type === "response") ? "medium" : "large"}
-                        color={(message.type === "response") ? "primary" : "secondary"}>
-                        <ReactMarkdown>{message.text}</ReactMarkdown>
-                    </Text>
+                    <Grid.Container gap={1} justify="flex-start" alignItems="center">
+                        <Grid>
+                            <Avatar src={message.sentBy.avatar} />
+                        </Grid>
+                        <Grid>
+                            <Text
+                                size={(message.type === "response") ? "medium" : "large"}
+                                color={(message.type === "response") ? "primary" : "secondary"}>
+                                <ReactMarkdown>{message.text}</ReactMarkdown>
+                            </Text>
+                        </Grid>
+                    </Grid.Container>
                 </Card.Body>
             </Card>
         </Container>
