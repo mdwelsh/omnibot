@@ -11,20 +11,15 @@ async function gqlQuery(query: string): Promise<any> {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: query }),
     };
-    fetch(url, req)
-        .then(async response => {
-            console.log("gqlQuery got response: ", response);
-            const data = await response.json();
-            console.log("Response data: ", data);
-            if (!response.ok) {
-                const error = data.error || response.status;
-                return Promise.reject(error);
-            }
-            return data;
-        })
+    const response = await fetch(url, req);
+    if (!response.ok) {
+        console.log("gqlQuery got error response: ", response);
+        throw new Error('Request failed with status ' + response.status);
+    }
+    const data = await response.json();
+    console.log("gqlQuery got response data: ", data);
+    return data;
 }
-
-
 
 export default function Search() {
     const [loading, setLoading] = useState(false);
