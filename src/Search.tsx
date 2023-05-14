@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { Container, Input, Loading, Grid, Text } from "@nextui-org/react";
 import { BiSearch } from "react-icons/bi";
+import ReactMarkdown from 'react-markdown';
+
 
 // Proxy through our Netlify function to the GraphQL endpoint of the Fixie service.
 async function gqlQuery(query: string, variables: any): Promise<any> {
@@ -61,7 +63,7 @@ async function getMessages(session: string) {
 
 function Message({ message }: { message: any }) {
     return (
-        <Text>{message.text}</Text>
+        <ReactMarkdown>{message.text}</ReactMarkdown>
     );
 }
 
@@ -140,10 +142,7 @@ export default function Search() {
 
         // Start polling for messages.
         console.log("Starting to poll for responses");
-        setPolling(true);
-        const interval = setInterval(pollForMessages, 1000);
-        setIntervalId(interval);
-        console.log("Started polling with interval id: ", interval);
+        setPolling(true);  // This causes polling to start due to the useEffect hook.
     };
 
     return (
