@@ -62,18 +62,15 @@ export default function Search() {
     const [loading, setLoading] = useState(false);
     const [userQuery, setUserQuery] = useState("");
     const [response, setResponse] = useState("");
-    const [session, setSession] = useState("");
 
     const doSearch = async () => {
         console.log("doSearch sending query: ", userQuery);
         setLoading(true);
 
-        if (session === "") {
-            const handle = await createSession();
-            setSession(handle);
-        }
+        // We always create a new session.
+        const sessionHandle = await createSession();
 
-        console.log("Sending query to session: ", session);
+        console.log("Sending query to session: ", sessionHandle);
 
         // We first send the query to the session.
         let query = `mutation Post($session: String!, $text: String!) {
@@ -84,14 +81,14 @@ export default function Search() {
             }
         }`;
         let messageData = await gqlQuery(query, {
-            session: session,
+            session: sessionHandle,
             text: userQuery,
         });
         let messageText = messageData.data.sendSessionMessage.message.text;
         console.log("Sent text: ", messageText);
 
         // XXX NEED TO POLL HERE.
-        await getMessages(session);
+        await getMessages(sessionHandle);
         setLoading(false);
     };
 
