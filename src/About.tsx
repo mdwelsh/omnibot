@@ -17,11 +17,26 @@ export default function About({ open, closeHandler }) {
                         <Container>
                             <Text size="$md">
                                 Omnibot is an AI chatbot that answers questions
-                                about <a href="https://www.omnibusproject.com/">The Omnibus Project</a>.
+                                about <a href="https://www.omnibusproject.com/">The Omnibus Project</a>,
+                                the hit podcast by Ken Jennings and John Roderick.
                             </Text>
                             <Spacer y={1} />
                             <Text>
-                                It was developed by <a href="https://www.mdw.la">Matt Welsh</a>.
+                                Omnibot is built using <a href="https://fixie.ai">Fixie</a>, a new AI platform
+                                that makes it easy to build and deploy AI-powered chatbots.
+                            </Text>
+                            <Spacer y={1} />
+                            <Text>
+                                It works by pulling down the MP3 files of each episode of the podcast,
+                                using <a href="https://deepgram.com">Deepgram</a> to transcribe the audio into text,
+                                and then using <a href="https://fixie.ai">Fixie</a> to construct an agent
+                                that can answer questions about the podcast.
+                            </Text>
+                            <Spacer y={1} />
+                            <Text>
+                                Omnibot was developed by <a href="https://www.mdw.la">Matt Welsh</a>.
+                                You can check out the <a href="https://github.com/mdwelsh/omnibot">source code on GitHub</a>,
+                                as well as the <a href="https://fixie.ai">Fixie</a> platform that powers it.
                             </Text>
                         </Container>
                     </Grid>

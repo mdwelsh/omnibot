@@ -6,17 +6,17 @@ import ReactMarkdown from 'react-markdown';
 
 // Messages shown while we wait for a response.
 const WAITING_TEXT = [
-    "Aligning with the spheres...",
     "Reading the tea leaves...",
     "Consulting the entrails...",
-    "Radioing the bunker...",
-    "Checking the archives...",
+    "Locking down the bunker...",
     "Beseeching the oracle...",
     "Snowblowing the Ob lobes...",
     "Checking for compatibility with Marxism...",
-    "Gathering Patreon supporters...",
-    "Shredding the mail...",
+    "Opening the mail...",
     "Making jokes about Canadians...",
+    "Attuning to the universe...",
+    "Delving into the archives...",
+    "Taxing the rich...",
 ];
 
 const POLLING_INTERVAL = 2500;
@@ -94,14 +94,14 @@ function Message({ message }: { message: any }) {
                             ) : (
                                 <Avatar
                                     css={{ position: "absolute", top: "0.8rem" }}
-                                    size="xl"
+                                    size="lg"
                                     src={(message.type === "response") ? "/trefoil.png" : "/user.png"}
                                 />
                             )}
                         </Grid>
                         <Grid xs={10}>
                             {(message.type === "response") ? (
-                                <Text>
+                                <Text css={(message.id === "loading") ? { color: "gray" } : {}}  >
                                     <ReactMarkdown>{message.text}</ReactMarkdown>
                                 </Text>
                             ) : (
