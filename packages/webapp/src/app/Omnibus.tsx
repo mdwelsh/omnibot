@@ -1,16 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Container, Navbar, Spacer, Text, Image, Button, Link } from "@nextui-org/react";
 
 import About from './About';
+import Episodes from './Episodes';
 import Search from './Search';
 
 
 export default function Omnibus() {
     const [aboutVisible, setAboutVisible] = useState(false);
+    const [episodes, setEpisodes] = useState({});
     const aboutCloseHandler = () => {
         setAboutVisible(false);
     };
+
+    const getEpisodes = () => {
+        fetch("https://storage.googleapis.com/mdw-omnibus-project-audio/episodes.json", {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }
+        ).then(function (response) {
+            return response.json();
+        }).then(function (data) {
+            setEpisodes(data);
+        });
+    }
+    useEffect(() => {
+        getEpisodes()
+    }, [episodes]);
+
     return (
         <Container>
             <Navbar isBordered={true} variant="static">
@@ -63,6 +83,8 @@ export default function Omnibus() {
                     </Text>
                 </Text>
             </Container>
+            <Spacer y={1} />
+            <Episodes episodes={episodes} />
             <Spacer y={1} />
             <Search />
         </Container>
