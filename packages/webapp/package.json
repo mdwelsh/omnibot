@@ -1,5 +1,5 @@
 {
-  "name": "omnibot-webapp",
+  "name": "webapp",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,18 +11,13 @@
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
     "type-check": "tsc --noEmit",
-    "format:write": "prettier --write \"{app,lib,components}/**/*.{ts,tsx,mdx}\" --cache",
-    "format:check": "prettier --check \"{app,lib,components}**/*.{ts,tsx,mdx}\" --cache"
+    "format": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
+    "check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache"
   },
   "dependencies": {
     "@chatscope/chat-ui-kit-react": "^1.10.1",
     "@chatscope/chat-ui-kit-styles": "^1.4.0",
-    "@nextui-org/react": "^1.0.0-beta.12",
-    "node-fetch": "^2.6.11",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-icons": "^4.8.0",
-    "react-markdown": "^8.0.7",
+    "@nextui-org/react": "1.0.0-beta.12",
     "@vercel/analytics": "^1.0.0",
     "@vercel/kv": "^0.2.2",
     "@vercel/og": "^0.5.7",
@@ -31,22 +26,26 @@
     "next": "13.4.7",
     "next-auth": "0.0.0-manual.83c4ebd1",
     "next-themes": "^0.2.1",
-    "openai-edge": "^0.5.1"
+    "node-fetch": "^2.6.11",
+    "openai-edge": "^0.5.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.8.0",
+    "react-markdown": "^8.0.7",
+    "use-dark-mode": "^2.3.1"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.13",
     "@types/node": "^17.0.12",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@types/react-syntax-highlighter": "^15.5.6",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
-    "@vitejs/plugin-react": "^4.0.0",
     "eslint": "^8.38.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.3.4",
     "eslint-config-next": "13.4.7-canary.1",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.3.4",
     "prettier": "^2.7.1",
     "typescript": "^5.1.3"
   }

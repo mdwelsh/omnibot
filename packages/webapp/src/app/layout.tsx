@@ -1,6 +1,4 @@
 import { Metadata } from 'next'
-import { createTheme, NextUIProvider } from '@nextui-org/react';
-import useDarkMode from 'use-dark-mode';
 
 import './index.css'
 
@@ -31,9 +29,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en" suppressHydrationWarning>
       <head />
       <body>
-        <NextUIProvider theme={darkTheme}>
-          {children}
-        </NextUIProvider>
+        {children}
       </body>
     </html>
   )

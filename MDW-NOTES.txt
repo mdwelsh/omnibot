@@ -1,0 +1,20 @@
+
+Branch mdw/aijsx
+
+[6 Aug 2024]
+
+Two goals here:
+
+* Reimplement Omnibot using AI.JSX rather than calling into a Fixie Agent
+* Deploy to Vercel instead of Netlify (for consistency)
+
+The Vercel change is easier -- we would need to modify the app to use Next.js, and put the Netlify
+Function (which calls into a Fixie Agent) behind an "api/" endpoint. This is probably fairly simple.
+
+For reimplementing the API backend using AI.JSX: Two options.
+  1. Use the FixieCorpus stuff and have it use the Fixie corpus ID from the Omnibot Fixie agent. (Definitely easier.)
+  2. Use Pinecone directly and reimplement the indexing, KNN, etc. stuff in AI.JSX (more fun, more work.)
+
+
+
+

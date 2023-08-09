@@ -27,13 +27,17 @@ the Netlify function holds the auth credentials to talk to the Fixie agent.
 
 To run the app locally, you first need to create a Netlify account.
 You can then install the Netlify CLI with:
+
 ```
 $ npm install -g netlify-cli
 ```
+
 You can then link this directory to your Netlify project with:
+
 ```
 $ netlify link
 ```
+
 You will need to configure your Netlify project with an environment variable called
 `FIXIE_API_KEY` that contains the API key for your Fixie account. You can obtain this by
 creating an account at https://fixie.ai. Your Fixie API key will be found on your user
