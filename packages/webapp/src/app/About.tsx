@@ -1,6 +1,6 @@
-"use client"
 
-import { Container, Grid, Modal, Text, Spacer } from '@nextui-org/react'
+import { Modal, ModalHeader, ModalBody } from '@nextui-org/modal'
+import { Spacer } from '@nextui-org/spacer'
 
 export default function About({
   open,
@@ -10,52 +10,34 @@ export default function About({
   closeHandler: () => void
 }) {
   return (
-    <Modal open={open} closeButton onClose={closeHandler} width="60%">
-      <Modal.Header>
-        <Text
-          b
-          color="inherit"
-          hideIn="xs"
-          css={{
-            fontSize: '40px',
-            fontFamily: 'Bungee'
-          }}
-        >
-          About Omnibot
-        </Text>
-      </Modal.Header>
-      <Modal.Body>
-        <Grid.Container
-          xs={12}
-          gap={1}
-          justify="center"
-          css={{ width: '100%' }}
-        >
-          <Grid xs={12}>
-            <Container>
-              <Text size="$md">
+    <Modal isOpen={open} closeButton onClose={closeHandler}>
+      <ModalHeader>
+        <div className="font-['Bungee'] text-4xl text-gray-800">About Omnibot</div>
+      </ModalHeader>
+      <ModalBody>
+        <div>
+          <div>
+            <div>
+              <p>
                 Omnibot is an AI chatbot that answers questions about{' '}
                 <a href="https://www.omnibusproject.com/">
                   The Omnibus Project
                 </a>
                 , the hit podcast by Ken Jennings and John Roderick.
-              </Text>
-              <Spacer y={1} />
-              <Text>
+              </p>
+              <p>
                 Omnibot is built using <a href="https://fixie.ai">Fixie</a>, a
                 new AI platform that makes it easy to build and deploy
                 AI-powered chatbots.
-              </Text>
-              <Spacer y={1} />
-              <Text>
+              </p>
+              <p>
                 It works by pulling down the MP3 files of each episode of the
                 podcast, using <a href="https://deepgram.com">Deepgram</a> to
                 transcribe the audio into text, and then using{' '}
                 <a href="https://fixie.ai">Fixie</a> to construct an agent that
                 can answer questions about the podcast.
-              </Text>
-              <Spacer y={1} />
-              <Text>
+              </p>
+              <p>
                 Omnibot was developed by{' '}
                 <a href="https://www.mdw.la">Matt Welsh</a>. You can check out
                 the{' '}
@@ -64,11 +46,11 @@ export default function About({
                 </a>
                 , as well as the <a href="https://fixie.ai">Fixie</a> platform
                 that powers it.
-              </Text>
-            </Container>
-          </Grid>
-        </Grid.Container>
-      </Modal.Body>
+              </p>
+            </div>
+          </div>
+        </div>
+      </ModalBody>
     </Modal>
   )
 }

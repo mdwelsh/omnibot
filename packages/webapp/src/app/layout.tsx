@@ -1,3 +1,4 @@
+import {Providers} from "./providers";
 import { Metadata } from 'next'
 
 import './index.css'
@@ -29,8 +30,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en" suppressHydrationWarning>
       <head />
       <body>
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   )
 }
+

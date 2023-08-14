@@ -1,15 +1,10 @@
-"use client"
+'use client'
 
 import { useState, useEffect } from 'react'
-import {
-  Avatar,
-  Card,
-  Container,
-  Input,
-  Loading,
-  Grid,
-  Text
-} from '@nextui-org/react'
+import { Avatar } from '@nextui-org/avatar';
+import { Card, CardBody } from '@nextui-org/card';
+import { Input } from '@nextui-org/input';
+import { CircularProgress } from '@nextui-org/progress';
 import { BiSearch } from 'react-icons/bi'
 import ReactMarkdown from 'react-markdown'
 
@@ -92,36 +87,38 @@ async function getMessages(session: string) {
 /// Represents a single message in a chat session.
 function Message({ message }: { message: any }) {
   return (
-    <Container>
+    <div>
       <Card>
-        <Card.Body>
-          <Grid.Container gap={1} justify="flex-start" alignItems="center">
-            <Grid xs={2}>
+        <CardBody>
+          <div>
+            <div>
               {message.id === 'loading' ? (
-                <Loading />
+                <CircularProgress />
               ) : (
                 <Avatar
-                  css={{ position: 'absolute', top: '0.8rem' }}
+                  // css={{ position: 'absolute', top: '0.8rem' }}
                   size="lg"
                   src={
                     message.type === 'response' ? '/trefoil.png' : '/user.png'
                   }
                 />
               )}
-            </Grid>
-            <Grid xs={10}>
+            </div>
+            <div>
               {message.type === 'response' ? (
-                <Text css={message.id === 'loading' ? { color: 'gray' } : {}}>
-                  <ReactMarkdown>{message.text}</ReactMarkdown>
-                </Text>
+                <p className="text-gray-500">
+                  <ReactMarkdown>
+                    {message.text}
+                  </ReactMarkdown>
+                </p>
               ) : (
-                <Text size={'$xl'}>{message.text}</Text>
+                <p>{message.text}</p>
               )}
-            </Grid>
-          </Grid.Container>
-        </Card.Body>
+            </div>
+          </div>
+        </CardBody>
       </Card>
-    </Container>
+    </div>
   )
 }
 
@@ -161,15 +158,15 @@ function SearchResults({ results }: { results: any[] }) {
   }
 
   return (
-    <Container>
-      <Grid.Container justify="center" gap={1} css={{ width: '100%' }}>
+    <div>
+      <div>
         {messages.map((message, index) => (
-          <Grid xs={12} key={index}>
+          <div key={index}>
             <Message message={message} />
-          </Grid>
+          </div>
         ))}
-      </Grid.Container>
-    </Container>
+      </div>
+    </div>
   )
 }
 
@@ -245,20 +242,18 @@ export default function Search() {
   }
 
   return (
-    <Container>
-      <Grid.Container justify="center" gap={1} css={{ width: '100%' }}>
-        <Grid xs={12}>
+    <div>
+      <div>
+        <div>
           <Input
             placeholder="Ask me anything about the Omnibus"
-            bordered={true}
-            rounded
-            size="xl"
+            size="lg"
             fullWidth
             readOnly={polling}
             disabled={polling}
-            contentLeft={
+            startContent={
               polling ? (
-                <Loading size="sm" type="points-opacity" />
+                <CircularProgress size="sm" />
               ) : (
                 <BiSearch />
               )
@@ -272,13 +267,13 @@ export default function Search() {
               }
             }}
           />
-        </Grid>
-      </Grid.Container>
-      <Grid.Container justify="center" gap={1} css={{ width: '100%' }}>
-        <Grid xs={12}>
+        </div>
+      </div>
+      <div>
+        <div>
           <SearchResults results={messages} />
-        </Grid>
-      </Grid.Container>
-    </Container>
+        </div>
+      </div>
+    </div>
   )
 }
