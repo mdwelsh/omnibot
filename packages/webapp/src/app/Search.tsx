@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Avatar } from '@nextui-org/avatar';
-import { Card, CardBody } from '@nextui-org/card';
-import { Input } from '@nextui-org/input';
-import { CircularProgress } from '@nextui-org/progress';
+import { Avatar } from '@nextui-org/avatar'
+import { Card, CardBody } from '@nextui-org/card'
+import { Input } from '@nextui-org/input'
+import { CircularProgress } from '@nextui-org/progress'
 import { BiSearch } from 'react-icons/bi'
 import ReactMarkdown from 'react-markdown'
 
@@ -107,9 +107,7 @@ function Message({ message }: { message: any }) {
             <div>
               {message.type === 'response' ? (
                 <p className="text-gray-500">
-                  <ReactMarkdown>
-                    {message.text}
-                  </ReactMarkdown>
+                  <ReactMarkdown>{message.text}</ReactMarkdown>
                 </p>
               ) : (
                 <p>{message.text}</p>
@@ -252,11 +250,7 @@ export default function Search() {
             readOnly={polling}
             disabled={polling}
             startContent={
-              polling ? (
-                <CircularProgress size="sm" />
-              ) : (
-                <BiSearch />
-              )
+              polling ? <CircularProgress size="sm" /> : <BiSearch />
             }
             onChange={e => {
               setUserQuery(e.target.value)

@@ -1,6 +1,5 @@
 
 import { Modal, ModalHeader, ModalBody } from '@nextui-org/modal'
-import { Spacer } from '@nextui-org/spacer'
 
 export default function About({
   open,

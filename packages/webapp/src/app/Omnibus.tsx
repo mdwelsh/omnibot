@@ -2,10 +2,15 @@
 
 import React, { useEffect, useState } from 'react'
 
-import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/navbar'
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem
+} from '@nextui-org/navbar'
+import { Button } from '@nextui-org/button'
 import { Spacer } from '@nextui-org/spacer'
 import { Image } from '@nextui-org/image'
-import { Button } from '@nextui-org/button'
 import { Link } from '@nextui-org/link'
 
 import About from './About'
@@ -20,42 +25,49 @@ export default function Omnibus() {
   }
 
   const getEpisodes = () => {
-    fetch(
-      'https://storage.googleapis.com/mdw-omnibus-project-audio/episodes.json',
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json'
-        }
-      }
-    )
-      .then(function (response) {
-        return response.json()
-      })
-      .then(function (data) {
-        setEpisodes(data)
-      })
+    // fetch(
+    //   'https://storage.googleapis.com/mdw-omnibus-project-audio/episodes.json',
+    //   {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       Accept: 'application/json'
+    //     }
+    //   }
+    // )
+    //   .then(function (response) {
+    //     return response.json()
+    //   })
+    //   .then(function (data) {
+    //     setEpisodes(data)
+    //   })
   }
   useEffect(() => {
-    getEpisodes()
+    //getEpisodes()
   }, [episodes])
 
   return (
-    <div>
-      <Navbar isBordered={true}>
+    <div className="w-full">
+      <Navbar isBordered>
         <NavbarBrand>
-          <Image src="/trefoil.png" height={48} alt="Omnibus Logo" />
-          <Spacer></Spacer>
-          <p className="font-['Bungee'] text-4xl text-gray-800">Omnibot</p>
+          <Image src="/trefoil.png" className="h-12" alt="Omnibus Logo" />
+          <p className="font-['Bungee'] text-4xl text-white">Omnibot</p>
         </NavbarBrand>
-        {/* About page */}
-        <NavbarContent>
-          <Button color="primary" onClick={() => setAboutVisible(true)}>
-            About
-          </Button>
-          <Button color="primary">
-            <Link href="https://github.com/mdwelsh/omnibot">GitHub</Link>
-          </Button>
+        <NavbarContent justify="end" className="flex">
+          <NavbarItem>
+            <Button
+              color="primary"
+              variant="flat"
+              onClick={() => setAboutVisible(true)}
+            >
+              About
+            </Button>
+          </NavbarItem>
+          {/* XXX MDW - I don't think a <Link> can be inside a <Button>. */}
+          {/* <NavbarItem className="flex">
+            <Button color="primary" as={Link} href="#" variant="flat">
+              <Link href="https://github.com/mdwelsh/omnibot">GitHub</Link>
+            </Button>
+          </NavbarItem> */}
         </NavbarContent>
       </Navbar>
       <Spacer />
@@ -66,18 +78,19 @@ export default function Omnibus() {
         <span>
           is an AI-powered chatbot that can answer questions about the hit
           podcast,{' '}
-          <a href="https://www.omnibusproject.com/">The Omnibus Project</a>, by
+          <Link href="https://www.omnibusproject.com/">The Omnibus Project</Link>, by
           Ken Jennings and John Roderick.
         </span>
         <Spacer y={1} />
         <span>
           Omnibot is powered by{' '}
-          <a href="https://fixie.ai">
+          <Link href="https://fixie.ai">
             <b>Fixie</b>
-          </a>
+          </Link>
           , a platform that makes it easy to build and deploy AI-powered
           chatbots.
         </span>
+        <Button>Hello</Button>
         <Spacer y={1} />
         <p>Try asking questions like:</p>
         <p className="font-mono">Who was Magic Alex?</p>
@@ -89,7 +102,7 @@ export default function Omnibus() {
       <Spacer y={1} />
       <Episodes episodes={episodes} />
       <Spacer y={1} />
-      <Search />
+      {/* <Search /> */}
     </div>
   )
 }
