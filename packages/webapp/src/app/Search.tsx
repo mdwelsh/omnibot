@@ -175,46 +175,46 @@ export default function Search() {
   const [messages, setMessages] = useState([])
   const [polling, setPolling] = useState(false)
 
-  useEffect(() => {
-    // Create session when component mounts.
-    // This async function is here because we can't use async directly in useEffect.
-    if (sessionHandle === '') {
-      const openSession = async () => {
-        const session = await createSession()
-        setSessionHandle(session)
-      }
-      openSession()
-    }
+  // useEffect(() => {
+  //   // Create session when component mounts.
+  //   // This async function is here because we can't use async directly in useEffect.
+  //   if (sessionHandle === '') {
+  //     const openSession = async () => {
+  //       const session = await createSession()
+  //       setSessionHandle(session)
+  //     }
+  //     openSession()
+  //   }
 
-    // Poll for messages when necessary.
-    let intervalId: any
-    if (polling) {
-      console.log('Starting polling interval')
-      intervalId = setInterval(async () => {
-        console.log('Polling for messages on: ', sessionHandle)
-        const result = await getMessages(sessionHandle)
-        setMessages(result)
+  //   // Poll for messages when necessary.
+  //   let intervalId: any
+  //   if (polling) {
+  //     console.log('Starting polling interval')
+  //     intervalId = setInterval(async () => {
+  //       console.log('Polling for messages on: ', sessionHandle)
+  //       const result = await getMessages(sessionHandle)
+  //       setMessages(result)
 
-        // XXX This is not quite right, since if we poll before the query message shows
-        // up in the Session, we prematurely believe that the query is done.
-        // We need to ensure that the message.inReplyTo is the most recent query message.
-        if (result[result.length - 1].type === 'response') {
-          console.log(
-            'Got final response, stopping polling on interval: ',
-            intervalId
-          )
-          clearInterval(intervalId)
-          setPolling(false)
-        }
-      }, POLLING_INTERVAL)
-    }
-    return () => {
-      if (intervalId) {
-        console.log('Cleaning up polling interval: ', intervalId)
-        clearInterval(intervalId)
-      }
-    }
-  }, [sessionHandle, polling])
+  //       // XXX This is not quite right, since if we poll before the query message shows
+  //       // up in the Session, we prematurely believe that the query is done.
+  //       // We need to ensure that the message.inReplyTo is the most recent query message.
+  //       if (result[result.length - 1].type === 'response') {
+  //         console.log(
+  //           'Got final response, stopping polling on interval: ',
+  //           intervalId
+  //         )
+  //         clearInterval(intervalId)
+  //         setPolling(false)
+  //       }
+  //     }, POLLING_INTERVAL)
+  //   }
+  //   return () => {
+  //     if (intervalId) {
+  //       console.log('Cleaning up polling interval: ', intervalId)
+  //       clearInterval(intervalId)
+  //     }
+  //   }
+  // }, [sessionHandle, polling])
 
   const doSearch = async () => {
     console.log('doSearch sending query: ', userQuery)
@@ -240,8 +240,8 @@ export default function Search() {
   }
 
   return (
-    <div>
-      <div>
+    <div className="w-full flex justify-center">
+      <div className="w-3/5">
         <div>
           <Input
             placeholder="Ask me anything about the Omnibus"
